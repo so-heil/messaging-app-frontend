@@ -36,24 +36,24 @@ Both Front-End and Back-End are written in **TypeScript** and everything is **st
 ### Login Page
 
 In login page step-1 users enter their phone number (the cant choose their country using the CountryPicker modal) and submit, we send this phone number to firebase (on client-side).
-$login-step-1
+![Login Page Step 1](https://raw.githubusercontent.com/so-heil/messaging-app-frontend/master/public/demos/login-1.gif)
 
 If phone number is valid, user receives a SMS containing the code, and app goes to login step-2 in which user enters the code, if code is valid firebase gives us a token which we send to our backend and we check the token and get the phone number and uid from it, if the user exists in DB user logs in, else user sets a name and profile picture for their account and then logs in and redirects to Chat Page.
-$login-step-2
+![Login Page Step 2](https://raw.githubusercontent.com/so-heil/messaging-app-frontend/master/public/demos/login-2.gif)
 
 ### Chat Page
 
 There is a sidebar (has 3 modes: Chats, Contacts, Settings) and a Messages container in Chat Page, users can create groups (everyone has access) as shown below:
-$create-group
+![Creat Group](https://raw.githubusercontent.com/so-heil/messaging-app-frontend/master/public/demos/create-group.gif)
 
-By clicking on available chats in the sidebar, messages load from server and user can send messages to the selected group, on the server message saves in the database and emits to all online clients by WebSocket:
-$chat-2
+By clicking on available chats in the sidebar, messages load from server and user can send messages to the selected group, on the server message saves in the database and emits to all online clients using WebSocket:
+![Chat](https://raw.githubusercontent.com/so-heil/messaging-app-frontend/master/public/demos/chat-2.gif)
 
 Users are able to update their nickname and profile picture from settings panel in the sidebar:
-$update-profile
+![Update Profile](https://raw.githubusercontent.com/so-heil/messaging-app-frontend/master/public/demos/update-profile.gif)
 
 Users can add each-other as contacts (by custom name using their phone number) each user's contacts are saved in DB and only that specific user can access them.
-$contacts
+![Contacts](https://raw.githubusercontent.com/so-heil/messaging-app-frontend/master/public/demos/contacts.gif)
 
 By the way, every REST request and Socket event is checked that it has been sent from a valid user or not!
 
