@@ -11,3 +11,6 @@ node_modules
 src/config/firebase-config.json
 .firebaserc
 firebase.json
+
+yarn-error.log
+yarn.lock

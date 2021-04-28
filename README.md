@@ -1,127 +1,68 @@
-# tel
+# Real-Time Messaging App 💬
 
-This project was generated with [superplate](https://github.com/pankod/superplate).
+This app is a real-time, Telegram style messaging app written in TypeScript (Next.js and Nest.js) which allows users to create groups and start conversations with other users!
 
-## Getting Started
+## Features
 
-superplate is a Next.js all-in-one project generator. Create your project with the tools you need without spending hours on setting them up.
+-   Login with phone number (powered by firebase and Nest.js)
+-   Create new groups and chat in real-time (powered by socket.io) with other users in groups
+-   Users have their own nickname and profile picture which could be set in the login process and updated later.
+-   Telegram styled
+-   Users can create contacts and add some one on the app by their phone number.
 
-Every plugin comes with an example to give you a brief knowledge about their usage.
+## Technologies used
 
-## Available Scripts
+Both Front-End and Back-End are written in **TypeScript** and everything is **strongly-typed** and **OOP** based.
 
-### Running the development server.
+### Front-end
 
-```bash
-    yarn dev
-```
+-   _Framework_ : Next.js
+-   _Styling_: Material UI (some TextFields and Skeleton), Tailwind CSS and react-transition-group (animations)
+-   _State Management_: Redux with redux-thunk to handle side effects logic (AJAX requests)
+-   _HTTP Client_: Axios
+-   _Web Socket Client_: socket.io-client & strongly-typed-events
+-   _Phone Authentication and Cloud Storage_: Firebase
 
-### Building for production.
+### Back-end
 
-```bash
-    yarn build
-```
+-   _Framework_: [Nest.js](https://docs.nestjs.com/)
+-   _Database_: PostgreSQL
+-   _ORM_: TypeORM
+-   _Web Socket_: Socket.io
+-   _Authentication_: Session-based auth working with firebase-admin (for login)
 
-### Running the production server.
+## Project breakdown and demos
 
-```bash
-    yarn start
-```
+### Login Page
 
-### Linting & formatting your code.
+In login page step-1 users enter their phone number (the cant choose their country using the CountryPicker modal) and submit, we send this phone number to firebase (on client-side).
+$login-step-1
 
-```bash
-    yarn lint
-```
+If phone number is valid, user receives a SMS containing the code, and app goes to login step-2 in which user enters the code, if code is valid firebase gives us a token which we send to our backend and we check the token and get the phone number and uid from it, if the user exists in DB user logs in, else user sets a name and profile picture for their account and then logs in and redirects to Chat Page.
+$login-step-2
 
-### Running your tests.
+### Chat Page
 
-```bash
-    yarn test
-```
+There is a sidebar (has 3 modes: Chats, Contacts, Settings) and a Messages container in Chat Page, users can create groups (everyone has access) as shown below:
+$create-group
 
-## Learn More
+By clicking on available chats in the sidebar, messages load from server and user can send messages to the selected group, on the server message saves in the database and emits to all online clients by WebSocket:
+$chat-2
 
-To learn more about **superplate**, please check out the [Documentation](https://github.com/pankod/superplate).
+Users are able to update their nickname and profile picture from settings panel in the sidebar:
+$update-profile
 
-### **TailwindCSS**
+Users can add each-other as contacts (by custom name using their phone number) each user's contacts are saved in DB and only that specific user can access them.
+$contacts
 
-A utility-first CSS framework packed with classes like flex, pt-4, text-center and rotate-90 that can be composed to build any design, directly in your markup.
+By the way, every REST request and Socket event is checked that it has been sent from a valid user or not!
 
-[Go To Documentation](https://tailwindcss.com/docs)
+## How to run on your local machine
 
-### **SASS/SCSS**
-
-Sass is a stylesheet language that’s compiled to CSS. It allows you to use variables, nested rules, mixins, functions, and more, all with a fully CSS-compatible syntax.
-
-[Go To Documentation](https://sass-lang.com/documentation)
-
-### **Axios**
-
-Promise based HTTP client for the browser and node.js.
-
-[Go To Documentation](https://github.com/axios/axios)
-
-### **Environment Variables**
-
-Use environment variables in your next.js project for server side, client or both.
-
-[Go To Documentation](https://github.com/vercel/next.js/tree/canary/examples/environment-variables)
-
-### **SWR**
-
-React Hooks library for data fetching from Vercel
-
-[Go To Documentation](https://swr.vercel.app/)
-
-### **React Query**
-
-Hooks for fetching, caching and updating asynchronous data in React.
-
-[Go To Documentation](https://react-query.tanstack.com/overview)
-
-### **react-use**
-
-A Collection of useful React hooks.
-
-[Go To Documentation](https://github.com/streamich/react-use)
-
-### **React Redux**
-
-Redux helps you write applications that behave consistently, run in different environments (client, server, and native), and are easy to test.
-
-[Go To Documentation](https://redux.js.org/introduction/getting-started)
-
-### **ESLint**
-
-A pluggable and configurable linter tool for identifying and reporting on patterns in JavaScript. Maintain your code quality with ease.
-
-[Go To Documentation](https://eslint.org/docs/user-guide/getting-started)
-
-### **Prettier**
-
-An opinionated code formatter; Supports many languages; Integrates with most editors.
-
-[Go To Documentation](https://prettier.io/docs/en/index.html)
-
-### **lint-staged**
-
-The concept of lint-staged is to run configured linter (or other) tasks on files that are staged in git.
-
-[Go To Documentation](https://github.com/okonet/lint-staged)
-
-### **Testing Library**
-
-The React Testing Library is a very light-weight solution for testing React components. It provides light utility functions on top of react-dom and react-dom/test-utils.
-
-[Go To Documentation](https://testing-library.com/docs/)
-
-### **Docker**
-
-Docker simplifies and accelerates your workflow, while giving developers the freedom to innovate with their choice of tools, application stacks, and deployment environments for each project.
-
-[Go To Documentation](https://www.docker.com/get-started)
-
-## License
-
-MIT
+1.  Clone client and server files to your system
+2.  Create a new firebase app , in firebase console go to Project Settings and copy config of web app and create a `firebase-config.json` in `client/src/config/` and [Add the Firebase Admin SDK to server](https://firebase.google.com/docs/admin/setup).
+3.  You should create and run a PostgreSQL database, there is a .sh file on `server/src/start-db.sh` that does this on docker for you.
+4.  Create a `.env` file matching your DB config, it's pre written in `.env.template` (matches the `start-db.sh` defaults)
+5.  Install node_modules by `npm install` or `yarn install`
+6.  Start server on development mode by `npm run start:dev` or `yarn start:dev`
+7.  To run the client app install node_modules by `npm install` or `yarn install` and run it by `npm run dev` or `yarn dev` and you should be able to see on your browser on `http://localhost:8000/` (You may see some CORS related errors that you should disable it)
